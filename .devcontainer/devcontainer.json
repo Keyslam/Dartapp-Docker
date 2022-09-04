@@ -1,0 +1,12 @@
+{
+	"name": "Dartapp",
+
+	"context": "..",
+
+	"dockerFile": "../Dockerfile",
+
+	"forwardPorts": [3000],
+
+	"workspaceMount": "source=volume,target=/workspace,type=volume",
+	"workspaceFolder": "/workspace/Dartapp"
+}
