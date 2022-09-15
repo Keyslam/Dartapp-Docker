@@ -1,9 +1,11 @@
-FROM ubuntu:18.04
+FROM ubuntu:22.04
 
 WORKDIR /workspace
 
-# Install Git
+# Update
 RUN apt-get update
+
+# Install Git
 RUN apt-get install git -y
 
 # Install NPM
@@ -18,16 +20,24 @@ ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
 RUN node --version
 RUN npm --version
 
-# Clone repository
+# Install .NET 6
+RUN apt-get install -y dotnet6
+
+# Clone repository (Don't cache)
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 RUN git clone https://github.com/Keyslam/Dartapp
 WORKDIR /workspace/Dartapp
 
 # Temporary checkout
-RUN git checkout feature/frontend-react
+RUN git checkout feature/backend
 
 # Install front-end dependencies
 WORKDIR /workspace/Dartapp/Frontend
 RUN npm install
+
+# Install back-end dependencies
+WORKDIR /workspace/Dartapp/Backend
+RUN dotnet restore
 
 # Expose React app
 EXPOSE 3000
