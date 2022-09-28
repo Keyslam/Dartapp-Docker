@@ -23,13 +23,21 @@ RUN npm --version
 # Install .NET 6
 RUN apt-get install -y dotnet6
 
+# Install MySQL
+RUN apt-get install -y mysql-server
+
 # Clone repository (Don't cache)
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 RUN git clone https://github.com/Keyslam/Dartapp
 WORKDIR /workspace/Dartapp
+RUN git pull
 
 # Temporary checkout
-RUN git checkout feature/backend
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
+RUN git checkout feature/database
+
+# Setup database
+WORKDIR /workspace/Dartapp/Database
 
 # Install front-end dependencies
 WORKDIR /workspace/Dartapp/Frontend
